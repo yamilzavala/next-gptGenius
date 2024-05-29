@@ -6,5 +6,8 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: { },
+  daisyui: {
+    themes: ["winter", "dracula"],
+  },
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
 };
