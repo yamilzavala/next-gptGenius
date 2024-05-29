@@ -1,4 +1,5 @@
 const ToursPage = () => {
+
     return (
         <div>
             Tours Page
