@@ -1,5 +1,5 @@
 'use client'
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     createNewTour,
     generateTourResponse,
@@ -9,15 +9,26 @@ import toast from 'react-hot-toast';
 import TourInfo from "./TourInfo";
 
 const NewTour = () => {
+    const queryClient = useQueryClient();
     const {isPending, mutate:createNewTourFn, data: tour} = useMutation({
         mutationFn: async (destination) => {
-           const newTour = await generateTourResponse(destination);
-           console.log('===newTour===: ', newTour);
-           if (newTour) {
-                return newTour;
-           }
-           toast.error('No matching city found...');
-           return null;
+            //validate if tour exist
+            const existingTour = await getExistingTour(destination);
+
+            //if tour exist in db, omit request to ai and return tour from db
+            if(existingTour) return existingTour;
+           
+            const newTour = await generateTourResponse(destination);
+
+            //save newTour in db. Refresh tour view. Return newTour 
+            if (newTour) {
+                 await createNewTour(newTour);
+                 queryClient.invalidateQueries({queryKey: 'tours'});
+                 toast.success('Tour saved in db')
+                 return newTour;
+            }
+            toast.error('No matching city found...');
+            return null;           
         },        
         
     })

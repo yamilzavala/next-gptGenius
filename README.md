@@ -1180,16 +1180,22 @@ npx prisma init
 ```
 
 - ADD .ENV TO .GITIGNORE !!!!
+## .env
+DATABASE_URL=""
+DIRECT_URL=""
+SUPABASE_URL=""
+SUPABASE_KEY=""
 
-## PlanetScale
+## Supabase
+https://supabase.com/
 
 ## Model
 
 ```prisma
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
