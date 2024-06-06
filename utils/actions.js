@@ -96,12 +96,12 @@ export const getAllTours = async (searchTerm) => {
             OR: [
                 {
                     city: {
-                        content: searchTerm
+                        contains: searchTerm,
                     }
                 },
                 {
                     country: {
-                        content: searchTerm
+                        contains: searchTerm
                     }
                 }
             ]
@@ -111,4 +111,12 @@ export const getAllTours = async (searchTerm) => {
         }
     })
     return tours;
+}
+
+export const getSingleTour = async (tourId) => {
+    return prisma.tour.findUnique({
+        where: {
+            id: tourId
+        }
+    })
 }
